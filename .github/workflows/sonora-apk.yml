@@ -1,0 +1,34 @@
+
+name: Descomprimir ZIP SONORA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Descomprimir ZIP
+        run: |
+          set -e
+          ZIP=$(find . -maxdepth 1 -name '*.zip' -type f | head -n 1)
+          if [ -z "$ZIP" ]; then
+            echo "No se encontró el ZIP en la raíz"
+            exit 1
+          fi
+          mkdir extraido
+          unzip -o "$ZIP" -d extraido
+
+      - name: Guardar archivos descomprimidos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add extraido
+          git commit -m "Descomprimir proyecto SONORA" || echo "No hay cambios"
+          git push
