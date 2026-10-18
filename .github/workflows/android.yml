@@ -4,11 +4,14 @@ name: Compilar SONORA
 on:
   workflow_dispatch:
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar codigo
         uses: actions/checkout@v4
@@ -24,13 +27,14 @@ jobs:
         with:
           gradle-version: '8.9'
 
-       - name: Buscar proyecto Android
+      - name: Buscar proyecto Android
         id: project
+        shell: bash
         run: |
-          FILE=$(find . -name settings.gradle -o -name settings.gradle.kts | head -n 1)
+          FILE=$(find . \( -name settings.gradle -o -name settings.gradle.kts \) -type f | head -n 1)
           if [ -z "$FILE" ]; then
-            echo "No se encontró settings.gradle"
-            find . -maxdepth 4 -type f
+            echo "No se encontro settings.gradle"
+            find . -maxdepth 5 -type f | head -n 200
             exit 1
           fi
           echo "dir=$(dirname "$FILE")" >> "$GITHUB_OUTPUT"
@@ -38,6 +42,7 @@ jobs:
       - name: Compilar APK
         working-directory: ${{ steps.project.outputs.dir }}
         run: gradle assembleDebug
+
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
