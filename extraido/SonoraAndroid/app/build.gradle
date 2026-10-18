@@ -1,0 +1,17 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.sonora.music'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.sonora.music'
+        minSdk 23
+        targetSdk 35
+        versionCode 2
+        versionName '2.0.0'
+    }
+}
+
+dependencies {
+    implementation 'androidx.media:media:1.7.0'
+}
