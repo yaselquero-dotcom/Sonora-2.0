@@ -1,5 +1,5 @@
 package com.sonora.music;
-
+import android.media.audiofx.Equalizer;
 import android.app.*;
 import android.content.*;
 import android.media.*;
